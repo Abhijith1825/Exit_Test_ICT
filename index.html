@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Best Shopping Mode Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav">
+        <div class="brand">Smart Shopper Insight</div>
+        <nav>
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('predict') }}">Prediction</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Project Overview</p>
+          <h1>Predict the Best Shopping Mode for Each Consumer</h1>
+          <p>
+            This project analyzes customer shopping preferences using the attached dataset and predicts whether a customer is more likely to shop in an online, offline, or hybrid mode.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="{{ url_for('predict') }}">Open Prediction Page</a>
+          </div>
+        </div>
+        <div class="hero-card">
+          <h3>Target Variable</h3>
+          <div class="target-box">Best_Shopping_Mode</div>
+          <ul>
+            <li>Online</li>
+            <li>Offline</li>
+            <li>Equal / both</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="stats">
+        <div class="stat-card">
+          <span>Total records</span>
+          <strong>{{ total_rows }}</strong>
+        </div>
+        <div class="stat-card">
+          <span>Input features</span>
+          <strong>{{ summary.feature_count }}</strong>
+        </div>
+        <div class="stat-card">
+          <span>Model accuracy</span>
+          <strong>{{ model_accuracy }}</strong>
+        </div>
+      </section>
+
+      <section class="overview-grid">
+        <div class="panel">
+          <h2>Dataset Insight</h2>
+          <p>
+            The model is built from consumer behavior features such as age, income, preferred platform, device type, buying tendencies, and shopping preferences. These attributes are used to estimate the ideal shopping format for each user.
+          </p>
+          <ul class="bullet-list">
+            <li>Customer profile and demographics</li>
+            <li>Behavioral shopping patterns</li>
+            <li>Trust, budget, and brand engagement signals</li>
+            <li>Platform and payment habits</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h2>Target Distribution</h2>
+          {% for label, count in target_distribution.items() %}
+          <div class="distribution-item">
+            <div class="distribution-header">
+              <span>{{ label }}</span>
+              <span>{{ count }}</span>
+            </div>
+            <div class="bar">
+              <div class="bar-fill" style="width: {{ (count / total_rows) * 100 }}%"></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Feature Groups Included</h2>
+        <div class="chip-row">
+          <span>Age</span>
+          <span>Gender</span>
+          <span>Occupation</span>
+          <span>Country</span>
+          <span>Income</span>
+          <span>Platform</span>
+          <span>Device</span>
+          <span>Category</span>
+          <span>Trust score</span>
+          <span>Discount behavior</span>
+          <span>Return pattern</span>
+          <span>Payment method</span>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

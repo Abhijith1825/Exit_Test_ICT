@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping Mode Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav">
+        <div class="brand">Smart Shopper Insight</div>
+        <nav>
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('predict') }}">Prediction</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container prediction-page">
+      <section class="panel form-panel">
+        <h1>Customer Shopping Prediction</h1>
+        <p class="subtitle">Enter the customer profile to estimate their best shopping mode.</p>
+
+        <form method="POST" action="{{ url_for('predict') }}">
+          <div class="form-grid">
+            {% for field in form_fields %}
+              <div class="field-group">
+                <label for="{{ field.name }}">{{ field.label }}</label>
+
+                {% if field.type == 'select' %}
+                  <select id="{{ field.name }}" name="{{ field.name }}" required>
+                    <option value="">Select {{ field.label }}</option>
+                    {% for option in field.options %}
+                      <option value="{{ option }}" {% if form_values.get(field.name) == option %}selected{% endif %}>{{ option }}</option>
+                    {% endfor %}
+                  </select>
+                {% else %}
+                  <input
+                    id="{{ field.name }}"
+                    type="number"
+                    name="{{ field.name }}"
+                    min="{{ field.min }}"
+                    max="{{ field.max }}"
+                    step="{{ field.step }}"
+                    value="{{ form_values.get(field.name, '') if form_values.get(field.name) not in [none, 'None'] else '' }}"
+                    required
+                  />
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="form-action">
+            <button type="submit" class="btn primary">Predict</button>
+          </div>
+        </form>
+      </section>
+
+      {% if prediction %}
+      <section class="panel result-panel">
+        <h2>Prediction Result</h2>
+        <div class="result-badge">
+          <span>Predicted Best Shopping Mode</span>
+          <strong>{{ prediction }}</strong>
+        </div>
+        <p>
+          The current customer profile suggests the customer will perform best in the <strong>{{ prediction }}</strong> shopping mode.
+        </p>
+      </section>
+      {% endif %}
+    </main>
+  </body>
+</html>
